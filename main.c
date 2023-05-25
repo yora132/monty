@@ -1,6 +1,5 @@
 #include "monty.h"
-#include <stdio.h>
-#include <stdlib.h>
+#define _GNU_SOURCE
 
 
 data_t data = {NULL, NULL, NULL, 0};
