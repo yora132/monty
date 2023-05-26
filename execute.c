@@ -15,6 +15,7 @@ instruction_t opst[] = {
 {"swap", f_swap},
 {"add", f_add},
 {"nop", f_nop},
+{"sub", f_sub},
 {"div", f_div},
 {"mod", f_mod},
 {"queue", f_queue},
