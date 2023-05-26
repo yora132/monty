@@ -1,44 +1,77 @@
 #include "monty.h"
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
 /**
-* main - monty code interpreter
-* @argc: number of arguments
-* @argv: monty file location
+* main - entry into interpreter
+* @argc: argc counter
+* @argv: arguments
 * Return: 0 on success
 */
 int main(int argc, char *argv[])
 {
-char *content;
-FILE *file;
-size_t size = 0;
-ssize_t read_line = 1;
-stack_t *stack = NULL;
-unsigned int counter = 0;
-bus_t bus = {NULL, NULL, NULL, 0};
+int fd, ispush = 0;
+unsigned int line = 1;
+ssize_t n_read;
+char *buffer, *token;
+stack_t *h = NULL;
 if (argc != 2)
 {
-fprintf(stderr, "USAGE: monty file\n");
+printf("USAGE: monty file\n");
 exit(EXIT_FAILURE);
 }
-file = fopen(argv[1], "r");
-bus.file = file;
-if (!file)
+fd = open(argv[1], O_RDONLY);
+if (fd == -1)
 {
-fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+printf("Error: Can't open file %s\n", argv[1]);
 exit(EXIT_FAILURE);
 }
-while (read_line > 0)
+buffer = malloc(sizeof(char) * 10000);
+if (!buffer)
+return (0);
+n_read = read(fd, buffer, 10000);
+if (n_read == -1)
 {
-content = NULL;
-read_line = getline(&content, &size, file);
-bus.content = content;
-counter++;
-if (read_line > 0)
+free(buffer);
+close(fd);
+exit(EXIT_FAILURE);
+}
+token = strtok(buffer, "\n\t\a\r ;:");
+while (token != NULL)
 {
-execute(content, &stack, counter, file);
+if (ispush == 1)
+{
+push(&h, line, token);
+ispush = 0;
+token = strtok(NULL, "\n\t\a\r ;:");
+line++;
+continue;
 }
-free(content);
+else if (strcmp(token, "push") == 0)
+{
+ispush = 1;
+token = strtok(NULL, "\n\t\a\r ;:");
+continue;
 }
-free_stack(stack);
-fclose(file);
+else
+{
+if (get_op_func(token) != 0)
+{
+get_op_func(token)(&h, line);
+}
+else
+{
+free_dlist(&h);
+printf("L%d: unknown instruction %s\n", line, token);
+exit(EXIT_FAILURE);
+}
+}
+line++;
+token = strtok(NULL, "\n\t\a\r ;:");
+}
+free_dlist(&h); free(buffer);
+close(fd);
 return (0);
 }
