@@ -1,6 +1,6 @@
 #include "monty.h"
 /**
- * f_queue - change the mode to queue (FIFO) 
+ * f_queue - change the mode to queue (FIFO)
  * @head: double pointer to head node
  * @counter: line_number
  * Return: void
@@ -13,7 +13,7 @@ void f_queue(stack_t **head, unsigned int counter)
 }
 
 /**
- * addqueue - add a node at the end of the stack (FIFO) 
+ * addqueue - add a node at the end of the stack (FIFO)
  * @n: value of the node
  * @head: double pointer to head node
  * Return: void
