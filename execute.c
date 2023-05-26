@@ -18,6 +18,7 @@ instruction_t opst[] = {
 {"div", f_div},
 {"mod", f_mod},
 {"queue", f_queue},
+{"mul", f_mul},
 {NULL, NULL}
 };
 unsigned int i = 0;
