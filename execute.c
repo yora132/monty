@@ -19,6 +19,7 @@ instruction_t opst[] = {
 {"div", f_div},
 {"mod", f_mod},
 {"pchar", f_pchar},
+{"pstr", f_pstr},
 {"queue", f_queue},
 {"mul", f_mul},
 {"stack", f_stack},
